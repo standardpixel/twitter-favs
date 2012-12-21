@@ -1,6 +1,8 @@
+Clustr-r for node.js
+====================
 
-Clustr for node.js
-==================
+Which is like Clustr
+--------------------
 
 This is (going to be) a tool for generating alpha shapes from Flickr photo geo information for a woe_id.
 
