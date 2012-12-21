@@ -1,15 +1,11 @@
 var SP = {};
 
-SP.transactions = {};
-
-function jsonFlickrApi(r) {
-	SP.transactions.photosearch=r;
-	
-}
+SP.transactions   = {};
+SP.response_cache = {};
 
 (function() {
 	
-	YUI().use('node', function(Y) {
+	YUI().use('node','querystring', function(Y) {
 		
 		var mercator = d3.geo.mercator();
 		
@@ -35,21 +31,57 @@ function jsonFlickrApi(r) {
 		
 		}
 		
-		function getFlickrPointsForWoeId(woe_id, callback, scope) {
+		function callMethod(method_name, params, callback, scope) {
 			var scope = scope || this;
-			tell('Getting Flickr photos for '+woe_id+'...');
-			Y.Get.js('http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=6ded95f2901a334b25f2b058751c5012&woe_id='+woe_id+'&format=json&stpxid=photosearch&extras=geo', function (err) {
+			var method_key = method_name.replace(/\./g,'_');
+			
+			SP.transactions[method_key] = function(r) {SP.response_cache[method_key]=r}
+			var params_string = '&' + Y.QueryString.stringify(params) + '&';
+			Y.Get.js('http://api.flickr.com/services/rest/?method='+method_name+'&api_key=6ded95f2901a334b25f2b058751c5012'+params_string+'format=json&jsoncallback=SP.transactions.'+method_key, function (err) {
 			    if (err) {
 			        Y.Array.each(err, function (error) {
 			            Y.log('Error loading JS: ' + error.error, 'error');
+						tell('Not able to connect to the Flickr API. Im quitting.');
 			        });
 				
 			        return;
 			    }
 				
-				tell('Found ' + SP.transactions.photosearch.photos.photo.length + ' photos in ' + woe_id);
-				callback.apply(scope, [SP.transactions.photosearch]);
+				if (SP.response_cache[method_key].stat === 'fail') {
+					console.error('Flickr API error',SP.response_cache[method_key].message);
+					tell('Flickr api crapped out for some reason. Im quitting.');
+					return;
+				}
+				
+				callback.apply(scope, [SP.response_cache[method_key]]);
 			});
+		}
+		
+		function getFlickrPointsForWoeId(woe_id, callback, scope) {
+			var scope = scope || this;
+			
+			tell('getting info for ' + woe_id);
+			
+			callMethod('flickr.places.getInfo', {woe_id:woe_id}, function(r) {
+				
+				var woe = r.place;
+				
+				tell('looks like ' + woe_id + ' is ' + woe.woe_name + ', I\'ll call it that for now on.');
+				
+				if(Y.Lang.isObject(woe)) {
+					tell('Getting Flickr photos for '+woe.woe_name);
+					callMethod('flickr.photos.search', {
+						woe_id:woe_id,
+						extras:"geo"
+					}, function(r) {
+						tell('Found ' + r.photos.photo.length + ' photos in ' + woe.woe_name);
+						callback.apply(scope, [{woe:woe,photos:r.photos.photo}]);
+					});
+				} else {
+					console.error('woe_id: ' + woe_id + 'was not found');
+				}
+				
+			}, this);
 		}
 		
 		function getPointForCoordinate(coordinates_array) {
@@ -112,7 +144,7 @@ function jsonFlickrApi(r) {
 		}
 		
 		getFlickrPointsForWoeId(2487956, function(r) {
-			var coordinate_array = getCoordinateArray(r.photos.photo),
+			var coordinate_array = getCoordinateArray(r.photos),
 			    point_array      = [];
 			
 			tell('Converting coordinates to mercator ponts');
@@ -120,7 +152,8 @@ function jsonFlickrApi(r) {
 				point_array.push(getPointForCoordinate(coordinate_array[i]));
 			}
 			
-			tell('Drawing shape for ' + 2487956);
+			tell('Drawing a shape for ' + r.woe.woe_name);
+			
 			drawShape(point_array);
 
 		}, this);
