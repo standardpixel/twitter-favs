@@ -10,7 +10,11 @@ SP.response_cache = {};
 		var mercator = d3.geo.mercator();
 		
 		function tell(what) {
-			Y.one('#console_display').append('<li>' + what + '</li>');
+			Y.one('#console_display .dropbox').append('<li>' + what + '</li>');
+			
+			if(what === 'Done.') {
+				Y.one('#console_display .loader').setStyle('display','none');
+			}
 		}
 		
 		tell('Started.');
@@ -143,7 +147,8 @@ SP.response_cache = {};
 			tell('Done.');
 		}
 		
-		getFlickrPointsForWoeId(2487956, function(r) {
+		//sf 2487956
+		getFlickrPointsForWoeId(23424977 /*usa*/, function(r) {
 			var coordinate_array = getCoordinateArray(r.photos),
 			    point_array      = [];
 			
