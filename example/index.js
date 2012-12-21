@@ -11,6 +11,8 @@ function jsonFlickrApi(r) {
 	
 	YUI().use('node', function(Y) {
 		
+		var mercator = d3.geo.mercator();
+		
 		function getCoordinateArray(flickr_api_photo_list) {
 		
 			if(!Y.Lang.isObject(flickr_api_photo_list)) {
@@ -19,7 +21,7 @@ function jsonFlickrApi(r) {
 				var array_out = [];
 				for(var i=0 in flickr_api_photo_list) {
 					if(flickr_api_photo_list.hasOwnProperty(i)) {
-							array_out.push([flickr_api_photo_list[i].latitude, flickr_api_photo_list[i].longitude]);
+							array_out.push([flickr_api_photo_list[i].longitude, flickr_api_photo_list[i].latitude]);
 					}
 				}
 				return array_out;
@@ -42,8 +44,18 @@ function jsonFlickrApi(r) {
 			});
 		}
 		
+		function getPointForCoordinate(coordinates_array) {
+			var point_array = mercator(coordinates_array);
+			return point_array;
+		}
+		
 		getFlickrPointsForWoeId(2487956, function(r) {
-			console.log('list of points in ',getCoordinateArray(r.photos.photo));
+			var coordinate_array = getCoordinateArray(r.photos.photo);
+			
+			for(var i=0, l=coordinate_array.length; l > i; i++) {
+				console.log('points',getPointForCoordinate(coordinate_array[i]));
+			}
+
 		}, this);
 	});
 	console.log('index.js loaded');
