@@ -1,14 +1,6 @@
-Clustr-r for node.js
-====================
+Prototype Bootstrap
+===================
 
-This is (going to be) a tool for generating alpha shapes from Flickr photo geo information for a woe_id.
-
-My plan is to replace Clustr with this some day and make it open source. When it is all working hunkey dorey, it will generate version 3.0 of the Flickr alpha shapes.
-
-Questions? Ask away...
-gelinase@yahoo-inc.com
-
-
-
-Your friend in time,
-Dr. Emmit L. "Eric Gelinas" Brown.
+A npm module for creating a node / express / handlebars stack to support 
+quick prototypes. When I have an idea I usually loose about 40 minutes 
+setting up an environment for it. This should help me avoid that.
