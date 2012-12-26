@@ -1,4 +1,4 @@
-Prototype Bootstrap
+Prototype Boilerplate
 ===================
 
 A npm module for creating a node / express / handlebars stack to support 
