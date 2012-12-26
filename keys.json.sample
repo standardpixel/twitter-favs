@@ -1,0 +1,6 @@
+{
+	"aws" : {
+		"key"    : "<amazon key>",
+		"secret" : "<amazon secret>"
+	}
+}
