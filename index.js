@@ -3,7 +3,7 @@ var port       = 3000,
     express    = require('express'),
 	colors     = require('colors'),
     app        = express(),
-	app_title  = 'Prototype Boilerplate'; //Change this
+	app_title  = 'StandardPixel Prototype Boilerplate'; //Change this
 
 app.set('views', __dirname + '/example');
 app.set('view engine', 'html');
