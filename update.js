@@ -26,12 +26,12 @@ client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, acce
 		console.log(('found ' + favs.length + ' new favs'));
 		console.log('storing ids for new favs...');
 		for(var i=0, l=favs.length;l>i;i++) {
-			sdb.getItem('twitter-favs', favs[i].id_str, {sp_iteration:i}, function(error, data, data) {
+			sdb.getItem('twitter_favs', favs[i].id_str, {sp_iteration:i}, function(error, data, data) {
 				var iteration = data.query.sp_iteration;
 				if(error && error.Code != 'NoSuchDomain') {
 					console.log(('AWS Request Error ' + error.Message).red, error.Message);
-				} else if(error.Code == 'NoSuchDomain') {
-					sdb.putItem('twitter-favs',favs[iteration].id_str,{
+				} else if(error && error.Code === 'NoSuchDomain') {
+					sdb.putItem('twitter_favs',favs[iteration].id_str,{
 						text                         : favs[iteration].text,
 						screen_name                  : favs[iteration].user.screen_name,
 						profile_image_url            : favs[iteration].user.profile_image_url,
