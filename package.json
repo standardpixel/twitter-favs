@@ -18,6 +18,7 @@
     "url": "https://github.com/standardpixel/standardpixel-prototype-boilerplate"
   },
   "dependencies" : {
+	"colors"  : "*",
 	"express" : "*",
 	"hbs"     : "*",
 	"yui"     : "*"

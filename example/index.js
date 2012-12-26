@@ -7,7 +7,7 @@ SP.response_cache = {};
 	
 	YUI().use('node','querystring', function(Y) {
 		
-		
+		console.log('Hi');
 		
 	});
 	
