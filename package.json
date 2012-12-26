@@ -11,7 +11,8 @@
     } 
   ],
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+	"update_favs": "node update.json"
   },
   "repository": {
     "type": "git",
