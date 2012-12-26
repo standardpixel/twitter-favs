@@ -18,10 +18,11 @@
     "url": "https://github.com/standardpixel/standardpixel-prototype-boilerplate"
   },
   "dependencies" : {
-	"colors"  : "*",
-	"express" : "*",
-	"hbs"     : "*",
-	"yui"     : "*"
+	"colors"   : "*",
+	"express"  : "*",
+	"hbs"      : "*",
+	"simpledb" : "*",
+	"yui"      : "*"
   },
   "license": "MIT",
   "engines": {
