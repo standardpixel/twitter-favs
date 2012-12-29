@@ -17,18 +17,16 @@ var simpledb   = require('simpledb'),
 	access_token_secret = keys.twitter.access_secret;
 
 console.log('\033[2J');
-console.log('All Simple DB items in the twitter_favs domain'.bold.underline);
-console.log('Getting list...');
+console.log('Delete an item'.bold.underline);
+console.log('Finding...');
 
-sdb.select('select * from twitter_favs', function(error, result) {
+sdb.deleteItem('twitter_favs', process.argv[2], function(error, result) {
 	if(error) {
-		console.log('list-domain failed: '+error.Message );
+		console.log(('delete_item failed: '+error.Message).red);
 		return false;
 	} else {
-		console.log('There are ' + result.length + ' items in this domain:');
 		
-		for(var i=0, l=result.length; l > i; i++) {
-			console.log(('Tweet from ', result[i].screen_name).blue + ' (' + result[i].$ItemName + ')');
-		}
+		console.log('Done'.green);
+		
 	}
 });
