@@ -13,39 +13,19 @@ app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
 app.get('/', function(req,res) {
-	res.render('index.html', {
-	 	app_title : app_title
-	});
-});
-
-app.get('/update', function(req,res) {
-	var body   = '',
-	    sys    = require('util'),
-		OAuth  = require('oauth').OAuth,
-	    client = new OAuth(
-					"https://twitter.com/oauth/request_token",
-					"https://twitter.com/oauth/access_token", 
-					keys.twitter.consumer_key, 
-					keys.twitter.consumer_secret,
-					"1.0a", 
-					"http://localhost:3000/oauth/callback", 
-					"HMAC-SHA1"
-				),
-		access_token        = keys.twitter.access_token,
-		access_token_secret = keys.twitter.access_secret;
 	
-	client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, access_token_secret, function(error, data) {
-		var favs = JSON.parse(data);
-		
-		for(var i=0, l=favs.length;l>i;i++) {
-			body += "<p>" + favs[i].text + "</p>";
+	sdb.select('select * from twitter_favs where created_at is not null order by created_at desc limit 20', function(error, result) {
+		if(error) {
+			console.log(('list-domain failed: '+error.Message).red );
+			res.send(500, 'Something broke!');
+		} else {
+			res.render('index.html', {
+			 	app_title    : app_title,
+				twitter_favs : result
+			});
 		}
-		
-		body += "";
-		res.setHeader('Content-Type', 'text/html');
-		res.setHeader('Content-Length', body.length);
-		res.end(body);
 	});
+
 });
 
 app.use('/yui', express.static(__dirname + '/node_modules/yui'));
