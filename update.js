@@ -20,7 +20,8 @@ console.log('\033[2J');
 console.log('Twitter Favs updater'.bold.underline);
 console.log('Getting new favs...');
 client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, access_token_secret, function(error, data) {
-	var favs = JSON.parse(data);
+	var favs            = JSON.parse(data),
+	    too_new_message = 0;
 	
 	if(favs.length) {
 		console.log(('found ' + favs.length + ' new favs'));
@@ -42,7 +43,7 @@ client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, acce
 									console.log(('AWS Request Error ' + error.Message).red, error.Message);
 								} else {
 									if(data) {
-										console.log((favs[iteration].id_str + ' has already been added. So skipping it.').blue);
+										too_new_message++;
 									} else {
 										sdb.putItem('twitter_favs',favs[iteration].id_str,{
 											text                         : favs[iteration].text,
@@ -62,7 +63,16 @@ client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, acce
 							});
 						}
 					} else {
-						console.log((favs[i].id_str + ' is not newer than the last saved. So skipping it').blue);
+						too_new_message++;
+					}
+					
+					//
+					// Messages
+					//
+					if(i === favs.length-1) {
+						if(too_new_message) {
+							console.log(('Skipping ' +too_new_message+ ' tweets because they are older than the last stored tweet').blue);
+						}
 					}
 					
 				}
