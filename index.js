@@ -45,6 +45,7 @@ app.get('/', function(req,res) {
 });
 
 app.use('/yui', express.static(__dirname + '/node_modules/yui'));
+app.use('/jq', express.static(__dirname + '/node_modules/jquery'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/twitter-bootstrap'));
 app.use('/js', express.static(__dirname + '/example/js'));
 app.use('/style', express.static(__dirname + '/example/style'));

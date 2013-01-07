@@ -5,10 +5,8 @@ SP.response_cache = {};
 
 (function() {
 	
-	YUI().use('node', function(Y) {
-		
-		console.log('Hi');
-		
-	});
+	"use strict";
+	
+	console.log('Hello There');
 	
 })();
