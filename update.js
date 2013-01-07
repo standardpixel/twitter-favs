@@ -1,7 +1,6 @@
-var simpledb   = require('simpledb'),
-	colors     = require('colors'),
+var colors     = require('colors'),
 	keys       = require(__dirname + '/keys.json'),
-	sdb        = new simpledb.SimpleDB({keyid:keys.aws.key,secret:keys.aws.secret}),
+	sdb        = require(__dirname + '/simpledb_client'),
     sys        = require('util'),
 	OAuth      = require('oauth').OAuth,
     client     = new OAuth(
@@ -16,7 +15,7 @@ var simpledb   = require('simpledb'),
 	access_token        = keys.twitter.access_token,
 	access_token_secret = keys.twitter.access_secret;
 
-console.log('\033[2J');
+//console.log('\033[2J');
 console.log('Twitter Favs updater'.bold.underline);
 console.log('Getting new favs...');
 client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, access_token_secret, function(error, data) {
@@ -50,7 +49,8 @@ client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, acce
 											screen_name                  : favs[iteration].user.screen_name,
 											profile_image_url            : favs[iteration].user.profile_image_url,
 											profile_background_image_url : favs[iteration].user.profile_background_image_url,
-											created_at                   : new Date(favs[iteration].created_at).getTime()
+											created_at                   : new Date(favs[iteration].created_at).getTime(),
+											entities                     : favs[iteration].entities.urls
 										},function(error,data) {
 											if(error) {
 												console.log(('AWS Response Error ' + error.Message).red, error.Message, '(' + favs[iteration].id + '/' + favs[iteration].user.screen_name + ')');
