@@ -1,7 +1,6 @@
-var simpledb   = require('simpledb'),
-	colors     = require('colors'),
+var colors     = require('colors'),
 	keys       = require(__dirname + '/keys.json'),
-	sdb        = new simpledb.SimpleDB({keyid:keys.aws.key,secret:keys.aws.secret}),
+	sdb        = require(__dirname + '/simpledb_client.js').client,
     sys        = require('util'),
 	OAuth      = require('oauth').OAuth,
     client     = new OAuth(

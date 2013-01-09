@@ -1,11 +1,10 @@
 var port       = 3000,
 	http       = require('http'),
     express    = require('express'),
-	simpledb   = require('simpledb'),
 	colors     = require('colors'),
 	keys       = require(__dirname + '/keys.json'),
     app        = express(),
-	sdb        = new simpledb.SimpleDB({keyid:keys.aws.key,secret:keys.aws.secret})
+	sdb        = require(__dirname + '/simpledb_client.js').client,
 	app_title  = 'StandardPixel\'s Twitter Favs';
 
 app.set('views', __dirname + '/example');

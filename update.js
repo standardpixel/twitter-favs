@@ -1,6 +1,6 @@
 var colors     = require('colors'),
 	keys       = require(__dirname + '/keys.json'),
-	sdb        = require(__dirname + '/simpledb_client'),
+	sdb        = require(__dirname + '/simpledb_client.js').client,
     sys        = require('util'),
 	OAuth      = require('oauth').OAuth,
     client     = new OAuth(
@@ -15,7 +15,7 @@ var colors     = require('colors'),
 	access_token        = keys.twitter.access_token,
 	access_token_secret = keys.twitter.access_secret;
 
-//console.log('\033[2J');
+console.log('\033[2J');
 console.log('Twitter Favs updater'.bold.underline);
 console.log('Getting new favs...');
 client.get("https://api.twitter.com/1.1/favorites/list.json", access_token, access_token_secret, function(error, data) {
